@@ -10,6 +10,10 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('user connected', {
     userId: socket.id,
   });
+
+  socket.on('message', (message) => {
+    socket.broadcast.emit('message', message);
+  });
 });
 
-io.listen(3000);
+io.listen(8000);
