@@ -6,9 +6,18 @@ const io = new Server({
   },
 });
 
+io.use((socket, next) => {
+  const userName = socket.handshake.auth.userName;
+  if (!userName) {
+    return next(new Error('invalid username'));
+  }
+  socket.userName = userName;
+  next();
+});
+
 io.on('connection', (socket) => {
   socket.broadcast.emit('user connected', {
-    userId: socket.id,
+    userName: socket.userName,
   });
 
   socket.on('message', (message) => {
